@@ -1,0 +1,53 @@
+<!doctype html>
+
+<html>
+<head>
+<script src = "script/angular.js"></script>
+<script src = "script/filter.js"></script>
+<link href = "CSS/style.css" rel="stylesheet"/>
+</head>
+
+<body>
+<div ng-app="myModule" ng-controller="myController">
+
+Rows To Display : <input type="number" step="1" min="0" max="5" ng-model = "rowLimit" />
+<br><br>
+Order By : <select ng-model = "sortcol">
+					<option value="name">Name ASC</option>
+					<option value="dateOfBirth">Date of Birth ASC</option>
+					<option value="gender">Gender ASC</option>
+					<option value="-salary">Salary DES</option>
+			</select>
+<br><br>
+Search : <input type="text" placeholder="Search Employees" ng-model="searchText"/>
+<br>
+<input type="text" placeholder="Search Name" ng-model="searchText.name"/>
+<input type="text" placeholder="Search Gender" ng-model="searchText.gender"/>
+<input type="checkBox" ng-model="exactMatch"/> Exact Match &nbsp;&nbsp;
+<input type="checkBox" ng-model="hidesalory"/> Hide Salory
+
+<br><br>
+<table>
+<thead>
+<th ng-click="sortData('name')">Name<div ng-class="getSortClass('name')"></div></th>
+<th ng-click="sortData('dateOfBirth')">Date of Birth <div ng-class="getSortClass('dateOfBirth')"></div></th>
+<th ng-click="sortData('gender')">Gender <div ng-class="getSortClass('gender')"></div></th>
+<th ng-click="sortData('salary')">Salary(Number) <div ng-class="getSortClass(salary)"></div></th>
+<th ng-click="sortData('salary')" ng-hide="hidesalory">Salary(Currency) <div ng-class="getSortClass('salary')"></div></th>
+<th ng-click="sortData('salary')" ng-show="hidesalory">Salary(Currency) <div ng-class="getSortClass('salary')"></div></th>
+</thead>
+<tbody><tr ng-repeat = "employee in employees | limitTo:rowLimit | orderBy:sortcol:reverseSort |filter:searchText:exactMatch" >
+<td>{{employee.name | uppercase}}</td>
+<td>{{employee.dateOfBirth | date:"dd/MM/yyyy"}}</td>
+<td>{{employee.gender | lowercase}}</td>
+<td>{{employee.salary | number :1}} </td>
+<td ng-hide="hidesalory">{{employee.salary | currency:"INR ":1}} </td>
+<td ng-show="hidesalory">##########</td>
+</tr></tbody>
+</table>
+
+</div>
+
+</body>
+
+</html>
